@@ -19,7 +19,7 @@ spec:
     spec:
       project: devhub
       source:
-        repoURL: https://github.com/<votre-handle>/devhub-campus.git
+        repoURL: https://github.com/rayanSalhi/devhub-campus.git
         targetRevision: '{{branch}}'
         path: services/planning/chart
         helm:
