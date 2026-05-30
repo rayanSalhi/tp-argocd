@@ -14,7 +14,7 @@ spec:
 
   source:
     # TODO : URL de votre fork.
-    repoURL: https://github.com/rayanSalhi/devhub-campus.git
+    repoURL: https://github.com/rayanSalhi/tp-argocd.git 
     targetRevision: main
     path: services/notif/chart
     helm:

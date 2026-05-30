@@ -19,7 +19,7 @@ spec:
     spec:
       project: devhub
       source:
-        repoURL: https://github.com/rayanSalhi/devhub-campus.git
+        repoURL: https://github.com/rayanSalhi/tp-argocd.git 
         targetRevision: '{{branch}}'
         path: services/planning/chart
         helm:

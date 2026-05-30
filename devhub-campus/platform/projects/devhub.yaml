@@ -7,7 +7,7 @@ spec:
   description: Plateforme DevHub Campus
 
   sourceRepos:
-    - https://github.com/<VOTRE_HANDLE>/devhub-campus.git
+    - https://github.com/rayanSalhi/tp-argocd.git
 
   destinations:
     - server: https://kubernetes.default.svc
