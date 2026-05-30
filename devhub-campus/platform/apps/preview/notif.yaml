@@ -17,7 +17,7 @@ spec:
     spec:
       project: devhub
       source:
-        repoURL: https://github.com/<votre-handle>/devhub-campus.git
+        repoURL: https://github.com/rayanSalhi/tp-argocdet.git
         targetRevision: '{{branch}}'
         path: services/notif/chart
         helm:
