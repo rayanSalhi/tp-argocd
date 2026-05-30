@@ -1,0 +1,87 @@
+global:
+  domain: argocd.devhub.local
+
+configs:
+  params:
+    server.insecure: true
+  cm:
+    timeout.reconciliation: 180s
+    # Compte local pour tests RBAC
+    accounts.dev1: login, apiKey
+
+  rbac:
+    policy.default: ""
+    policy.csv: |
+      # platform-admin : tous les droits
+      p, role:platform-admin, applications, *, */*, allow
+      p, role:platform-admin, clusters, *, *, allow
+      p, role:platform-admin, repositories, *, *, allow
+      g, admin, role:platform-admin
+
+      # developer : lecture sur tout devhub, sync uniquement ses apps
+      p, role:developer, applications, get, devhub/*, allow
+      p, role:developer, applications, sync, devhub/annuaire-*, allow
+      p, role:developer, applications, sync, devhub/planning-*, allow
+      p, role:developer, applications, sync, devhub/notif-*, allow
+      g, dev1, role:developer
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hostname: argocd.devhub.local
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: HTTP
+    tls: false
+
+# Notifications (étape 9)
+notifications:
+  enabled: true
+  argocdUrl: https://argocd.devhub.local
+  notifiers:
+    service.webhook.sync-failed: |
+      url: https://webhook.site/<VOTRE_UUID>
+      headers:
+        - name: Content-Type
+          value: application/json
+  triggers:
+    trigger.on-sync-failed: |
+      - when: app.status.sync.status == 'Error' || app.status.conditions.filter(c, c.type == 'SyncError').length > 0
+        send: [app-sync-failed]
+  templates:
+    template.app-sync-failed: |
+      webhook:
+        sync-failed:
+          method: POST
+          body: |
+            {
+              "application": "{{.app.metadata.name}}",
+              "revision": "{{.app.status.sync.revision}}",
+              "status": "{{.app.status.sync.status}}",
+              "message": "{{range .app.status.conditions}}{{.message}}{{end}}"
+            }
+  subscriptions:
+    - recipients:
+        - sync-failed
+      triggers:
+        - on-sync-failed
+
+controller:
+  resources:
+    requests: { cpu: "50m", memory: "256Mi" }
+    limits: { cpu: "1", memory: "1Gi" }
+
+repoServer:
+  resources:
+    requests: { cpu: "50m", memory: "128Mi" }
+    limits: { cpu: "500m", memory: "512Mi" }
+
+# Expose les métriques Prometheus (étape 9)
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false  # true si vous avez le CRD Prometheus Operator
+server:
+  metrics:
+    enabled: true

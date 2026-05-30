@@ -1,0 +1,8 @@
+replicaCount: 2
+
+ingress:
+  enabled: true
+  host: planning-staging.devhub.local
+
+env:
+  LOG_LEVEL: info

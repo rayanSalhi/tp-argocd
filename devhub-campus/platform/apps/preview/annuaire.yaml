@@ -1,0 +1,40 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: annuaire-preview
+  namespace: argocd
+spec:
+  generators:
+    - git:
+        repoURL: https://github.com/<VOTRE_HANDLE>/devhub-campus.git
+        revision: HEAD
+        branches:
+          - feature/*
+
+  template:
+    metadata:
+      name: annuaire-preview-{{branchNormalized}}
+      labels:
+        devhub.io/env: preview
+        devhub.io/service: annuaire
+    spec:
+      project: devhub
+      source:
+        repoURL: https://github.com/<VOTRE_HANDLE>/devhub-campus.git
+        targetRevision: "{{branch}}"
+        path: services/annuaire/chart
+        helm:
+          valueFiles:
+            - values-preview.yaml
+          parameters:
+            - name: ingress.host
+              value: "{{branchNormalized}}.devhub.local"
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: devhub-preview-{{branchNormalized}}
+      syncPolicy:
+        automated:
+          prune: true      # ← CRITIQUE : nettoie à la suppression de branche
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
