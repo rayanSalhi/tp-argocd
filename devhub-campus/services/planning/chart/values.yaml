@@ -1,5 +1,5 @@
 image:
-  repository: ghcr.io/<votre-handle>/planning
+  repository: ghcr.io/rayanSalhi/planning
   tag: ""
   pullPolicy: IfNotPresent
 
