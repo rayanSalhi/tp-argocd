@@ -1,10 +1,6 @@
 apiVersion: v2
 name: notif
-description: Chart Helm du service notif — DevHub Campus
+description: Notif service DevHub Campus
 type: application
 version: 0.1.0
-appVersion: "0.1.0"
-# TODO : déclarez vous comme maintainer.
-# maintainers:
-#   - name: Prénom Nom
-#     email: prenom.nom@example.com
+appVersion: "1.0.0"
