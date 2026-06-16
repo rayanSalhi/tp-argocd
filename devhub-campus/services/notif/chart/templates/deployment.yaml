@@ -12,19 +12,28 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "notif.labels" . | nindent 8 }}
+        {{- include "notif.selectorLabels" . | nindent 8 }}
     spec:
-      # TODO : securityContext Pod-level.
       containers:
-        - name: notif
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.targetPort }}
-              name: http
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
           env:
-            - name: PORT
-              value: "{{ .Values.service.targetPort }}"
-            - name: LOG_LEVEL
-              value: "{{ .Values.env.LOG_LEVEL }}"
-          # TODO : probes, resources, securityContext.
+            - name: LOGLEVEL
+              value: {{ .Values.env.LOGLEVEL | default "info" | quote }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
