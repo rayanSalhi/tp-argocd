@@ -5,8 +5,10 @@ metadata:
   namespace: argocd
 spec:
   description: Plateforme DevHub Campus
+
   sourceRepos:
     - https://github.com/rayanSalhi/tp-argocd.git
+
   destinations:
     - server: https://kubernetes.default.svc
       namespace: devhub-dev
@@ -14,15 +16,35 @@ spec:
       namespace: devhub-preview-*
     - server: https://kubernetes.default.svc
       namespace: argocd
+
   clusterResourceWhitelist:
     - group: ""
       kind: Namespace
     - group: argoproj.io
       kind: Application
     - group: argoproj.io
-      kind: AppProject
-    - group: argoproj.io
       kind: ApplicationSet
+
   namespaceResourceWhitelist:
     - group: "*"
       kind: "*"
+
+  roles:
+    # Rôle developer : peut voir et syncer ses apps, pas supprimer
+    - name: developer
+      description: Développeur DevHub - sync uniquement
+      policies:
+        - p, proj:devhub:developer, applications, get, devhub/*, allow
+        - p, proj:devhub:developer, applications, sync, devhub/*, allow
+        - p, proj:devhub:developer, applications, override, devhub/*, allow
+      groups:
+        - devhub-developers
+
+    # Rôle platform-admin : accès complet sur le projet
+    - name: platform-admin
+      description: Admin plateforme - accès complet
+      policies:
+        - p, proj:devhub:platform-admin, applications, *, devhub/*, allow
+        - p, proj:devhub:platform-admin, repositories, *, *, allow
+      groups:
+        - devhub-admins
