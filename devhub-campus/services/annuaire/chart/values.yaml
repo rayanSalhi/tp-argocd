@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: nginx
-  tag: "alpine"
+  tag: "version-qui-nexiste-pas"
   pullPolicy: IfNotPresent
 service:
   port: 80
