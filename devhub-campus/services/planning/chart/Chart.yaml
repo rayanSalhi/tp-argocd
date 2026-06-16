@@ -1,10 +1,6 @@
 apiVersion: v2
 name: planning
-description: Chart Helm du service planning — DevHub Campus
+description: Planning service DevHub Campus
 type: application
 version: 0.1.0
-appVersion: "0.1.0"
-# TODO : déclarez vous comme maintainer.
- maintainers:
-   - name: Rayan
-     email: rayansalhi331@gmail.com.com
+appVersion: "1.0.0"
