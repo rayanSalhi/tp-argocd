@@ -12,24 +12,30 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "annuaire.labels" . | nindent 8 }}
+        {{- include "annuaire.selectorLabels" . | nindent 8 }}
     spec:
-      # TODO : appliquez le securityContext défini dans values.yaml.
-      # Indice : il y a un securityContext au niveau Pod ET au niveau container.
-      # Lequel met quoi ?
       containers:
-        - name: annuaire
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.targetPort }}
-              name: http
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
           env:
-            - name: PORT
-              value: "{{ .Values.service.targetPort }}"
-            - name: LOG_LEVEL
-              value: "{{ .Values.env.LOG_LEVEL }}"
-          # TODO : ajoutez la readinessProbe en s'appuyant sur .Values.probes.readiness.
-          # TODO : ajoutez la livenessProbe en s'appuyant sur .Values.probes.liveness.
-          # TODO : appliquez les resources de .Values.resources.
-          # TODO : appliquez le securityContext container-level.
+            - name: LOGLEVEL
+              value: {{ .Values.env.LOGLEVEL | default "info" | quote }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
