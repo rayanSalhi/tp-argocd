@@ -1,26 +1,20 @@
-{{/*
-  Helpers communs au chart annuaire.
-  TODO étape 4 : complétez le bloc `labels` avec les 4 labels obligatoires
-  cités dans le polycopié. La grille d'évaluation les vérifie.
-*/}}
-
 {{- define "annuaire.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- .Chart.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
 {{- define "annuaire.fullname" -}}
-{{- printf "%s-%s" .Release.Name (include "annuaire.name" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "annuaire.labels" -}}
-{{/* TODO : ajoutez ici :
-       app.kubernetes.io/name
-       app.kubernetes.io/instance
-       app.kubernetes.io/part-of: devhub-campus
-       app.kubernetes.io/managed-by: Helm
-*/}}
-{{- end -}}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
 {{- define "annuaire.selectorLabels" -}}
-{{/* TODO : sélecteur minimal stable (name + instance, pas managed-by qui peut bouger). */}}
-{{- end -}}
+app.kubernetes.io/name: {{ include "annuaire.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "annuaire.labels" -}}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+{{ include "annuaire.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/part-of: devhub-campus
+{{- end }}
