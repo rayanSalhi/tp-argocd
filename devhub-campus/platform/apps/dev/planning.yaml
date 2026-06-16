@@ -15,9 +15,9 @@ spec:
 
   source:
     # TODO : URL de votre fork.
-    repoURL: https://github.com/<votre-handle>/devhub-campus.git
+    repoURL: https://github.com/rayanSalhi/tp-argocd.git 
     targetRevision: main
-    path: services/planning/chart
+    path: devhub-campus/services/planning/chart
     helm:
       valueFiles:
         - values-dev.yaml

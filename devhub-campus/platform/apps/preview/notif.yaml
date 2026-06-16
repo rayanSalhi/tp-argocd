@@ -17,9 +17,9 @@ spec:
     spec:
       project: devhub
       source:
-        repoURL: https://github.com/<votre-handle>/devhub-campus.git
+        repoURL: https://github.com/rayanSalhi/tp-argocd.git 
         targetRevision: '{{branch}}'
-        path: services/notif/chart
+        path: devhub-campus/services/notif/chart
         helm:
           valueFiles:
             - values-preview.yaml

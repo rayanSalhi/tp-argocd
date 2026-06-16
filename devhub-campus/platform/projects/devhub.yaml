@@ -5,10 +5,9 @@ metadata:
   namespace: argocd
 spec:
   description: Plateforme DevHub Campus
-
   sourceRepos:
-    - https://github.com/<VOTRE_HANDLE>/devhub-campus.git
-
+    - https://github.com/rayanSalhi/tp-argocd.git
+    - https://github.com/rayanSalhi/tp-argocd.git   # ← temporaire, au cas où
   destinations:
     - server: https://kubernetes.default.svc
       namespace: devhub-dev
@@ -16,30 +15,13 @@ spec:
       namespace: devhub-preview-*
     - server: https://kubernetes.default.svc
       namespace: argocd
-
-  # Autorise la création de Namespace (cluster-scoped) — nécessaire pour previews
   clusterResourceWhitelist:
     - group: ""
       kind: Namespace
-
+    - group: argoproj.io
+      kind: Application
+    - group: argoproj.io
+      kind: AppProject
   namespaceResourceWhitelist:
     - group: "*"
       kind: "*"
-
-  # Défi bonus étape 6 : rôle developer
-  roles:
-    - name: developer
-      description: Peut voir toutes les apps devhub, sync uniquement les siennes
-      policies:
-        - p, proj:devhub:developer, applications, get, devhub/*, allow
-        - p, proj:devhub:developer, applications, sync, devhub/annuaire-*, allow
-        - p, proj:devhub:developer, applications, sync, devhub/planning-*, allow
-        - p, proj:devhub:developer, applications, sync, devhub/notif-*, allow
-
-  # Défi bonus : fenêtre d'interdiction de sync 18h-8h lun-ven
-  syncWindows:
-    - kind: deny
-      schedule: "0 18 * * 1-5"
-      duration: 14h
-      applications:
-        - "*"
