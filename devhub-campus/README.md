@@ -53,3 +53,4 @@ Le reste du TP se fait via Git — la commande `kubectl apply` ne devrait plus j
 ## Référence
 
 Polycopié complet : `argocd/POLYCOPIE-ARGOCD.pdf` à la racine du repo de cours.
+# preview test
