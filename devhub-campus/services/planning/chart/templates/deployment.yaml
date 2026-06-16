@@ -27,13 +27,15 @@ spec:
               value: {{ .Values.env.LOGLEVEL | default "info" | quote }}
           livenessProbe:
             httpGet:
-              path: /healthz
+              path: /
               port: http
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /healthz
+              path: /
               port: http
             initialDelaySeconds: 5
             periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
