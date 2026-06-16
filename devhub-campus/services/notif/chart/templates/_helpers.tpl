@@ -1,15 +1,20 @@
 {{- define "notif.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
+{{- .Chart.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
 {{- define "notif.fullname" -}}
-{{- printf "%s-%s" .Release.Name (include "notif.name" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "notif.labels" -}}
-{{/* TODO : 4 labels obligatoires. */}}
-{{- end -}}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" }}
+{{- end }}
 
 {{- define "notif.selectorLabels" -}}
-{{/* TODO. */}}
-{{- end -}}
+app.kubernetes.io/name: {{ include "notif.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{- define "notif.labels" -}}
+helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+{{ include "notif.selectorLabels" . }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+app.kubernetes.io/part-of: devhub-campus
+{{- end }}
