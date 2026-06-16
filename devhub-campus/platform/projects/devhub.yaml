@@ -7,7 +7,6 @@ spec:
   description: Plateforme DevHub Campus
   sourceRepos:
     - https://github.com/rayanSalhi/tp-argocd.git
-    - https://github.com/rayanSalhi/tp-argocd.git   # ← temporaire, au cas où
   destinations:
     - server: https://kubernetes.default.svc
       namespace: devhub-dev
@@ -22,6 +21,8 @@ spec:
       kind: Application
     - group: argoproj.io
       kind: AppProject
+    - group: argoproj.io
+      kind: ApplicationSet
   namespaceResourceWhitelist:
     - group: "*"
       kind: "*"
