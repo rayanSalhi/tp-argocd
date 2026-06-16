@@ -16,7 +16,7 @@ COPY app/ ./app/
 # ---- Stage 2 : runtime ----
 FROM python:3.12-slim AS runtime
 
-LABEL org.opencontainers.image.source="https://github.com/<VOTRE_HANDLE>/devhub-campus" \
+LABEL org.opencontainers.image.source="https://github.com/rayanSalhi/devhub-campus" \
       org.opencontainers.image.description="planning-service — DevHub Campus TP2" \
       org.opencontainers.image.licenses="MIT"
 

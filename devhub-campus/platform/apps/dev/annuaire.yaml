@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/rayanSalhi/tp-argocd.git 
     targetRevision: main
-    path: services/annuaire/chart
+    path: devhub-campus/services/annuaire/chart
     helm:
       valueFiles:
         - values-dev.yaml

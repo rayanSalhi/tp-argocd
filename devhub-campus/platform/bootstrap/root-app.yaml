@@ -26,7 +26,7 @@ spec:
     # TODO : indiquez ici le chemin où ArgoCD va chercher les manifestes
     # YAML à appliquer. Réfléchissez à ce qui doit (et ne doit pas) être
     # dans ce dossier.
-    path: platform/apps/dev
+    path: devhub-campus/platform/apps/dev
     directory:
       recurse: true
 
